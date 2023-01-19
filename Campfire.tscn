@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=3 uid="uid://qoawfg2gsdw3"]
+
+[ext_resource type="Shader" path="res://Campfire.gdshader" id="1_ki7vg"]
+[ext_resource type="Texture2D" uid="uid://ctp4u56b6xf1i" path="res://textures/fpg_keyed.png" id="2_wd80l"]
+[ext_resource type="Texture2D" uid="uid://q4c5mliap27n" path="res://textures/objects/fire.png" id="3_b48pp"]
+[ext_resource type="Texture2D" uid="uid://u7o6s1ivq6ba" path="res://textures/objects/Firehalo.png" id="4_6d7ya"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k8ckh"]
+shader = ExtResource("1_ki7vg")
+shader_parameter/bg_col = Color(0, 0, 0, 1)
+shader_parameter/fg_col = Color(0, 0, 0, 1)
+
+[node name="Campfire" type="Control"]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ForestBg" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_k8ckh")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_wd80l")
+
+[node name="Fire" type="TextureRect" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.454861
+anchor_top = 0.646605
+anchor_right = 0.546007
+anchor_bottom = 0.970679
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_b48pp")
+metadata/_edit_use_anchors_ = true
+
+[node name="FireHalo" type="TextureRect" parent="Fire"]
+modulate = Color(0.4, 0.145098, 0.0862745, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -5.95238
+anchor_top = 0.395238
+anchor_right = 6.54286
+anchor_bottom = 2.19048
+offset_bottom = -3.05176e-05
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(138, 138)
+texture = ExtResource("4_6d7ya")
+metadata/_edit_use_anchors_ = true

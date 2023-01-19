@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://d0qta4gls24c8"]
+
+[ext_resource type="Texture2D" uid="uid://cdgfcsfwk0rkp" path="res://gfx/textures/shade.png" id="1_pmgls"]
+
+[resource]
+shading_mode = 0
+albedo_color = Color(0.219608, 0.188235, 0.105882, 1)
+albedo_texture = ExtResource("1_pmgls")
+uv1_scale = Vector3(5, 5, 5)
+texture_filter = 0
