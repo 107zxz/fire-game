@@ -8,6 +8,8 @@ var inv = {
 	4: null,
 }
 
+var active_item = ""
+
 func _enter_tree():
 	
 	var sIdx = 0
@@ -87,9 +89,24 @@ func collect_item(item: Node3D) -> void:
 	# Inventory slot
 #	$UI/Inventory.get_child(note.note_index - 1).show()
 #	$UI/Inventory.get_child(note.note_index - 1).set_meta("note_text", note.note_text)
+
+	# Kill the item used to collect it
+	if active_item != "":
+		for invSlot in inv:
+			if inv[invSlot].name == active_item:
+				ditch_item(invSlot)
+				break
+		active_item = ""
+
+
+	# Don't collect 'generic' items
+	if item.item_meta.type == "generic":
+		return
+	
 	
 	for sl in inv:
 		if inv[sl] == null:
+			
 			
 			var uiSlot = $UI/Inventory.get_child(sl)
 			
@@ -100,6 +117,10 @@ func collect_item(item: Node3D) -> void:
 				uiSlot.show()
 			
 			uiSlot.get_child(0).texture = item.item_meta.icon
+			
+			# Special for usables
+			if item.item_meta.type == "item":
+				uiSlot.set_toggle_mode(true)
 			
 			break
 
@@ -115,7 +136,6 @@ func _invslot_clicked(slot):
 			$UI/LeftArrow.hide()
 			$UI/RightArrow.hide()
 		"fuel":
-			
 			# Mark burnconfirm with current fuel
 			$UI/BurnConfirm.set_meta("to_burn", slot)
 			$UI/BurnConfirm/VBoxContainer/ItemIcon.texture = inv[slot].icon
@@ -124,6 +144,11 @@ func _invslot_clicked(slot):
 			
 			$UI/LeftArrow.hide()
 			$UI/RightArrow.hide()
+		"item":
+			if $UI/Inventory.get_child(slot).is_pressed():
+				active_item = inv[slot].name
+			else:
+				active_item = ""
 
 
 
@@ -154,7 +179,7 @@ func _on_burn_yes_pressed():
 	$UI/RightArrow.show()
 
 
-func ditch_item(slot):
+func ditch_item(slot: int):
 	
 	# For each slot to right of thing
 	# if slot is filled
@@ -162,20 +187,26 @@ func ditch_item(slot):
 	
 	var currSlot = slot
 	
-	if currSlot == $UI/Inventory.get_child_count() - 1:
-		$UI/Inventory.get_child(currSlot).hide()
-		inv[currSlot] = null
+#	if currSlot == $UI/Inventory.get_child_count() - 1:
+	
 	
 	while currSlot < $UI/Inventory.get_child_count() - 1:
 		
 		if $UI/Inventory.get_child(currSlot + 1).visible:
 			$UI/Inventory.get_child(currSlot).get_child(0).texture = inv[currSlot + 1].icon
+			$UI/Inventory.get_child(currSlot).toggle_mode = $UI/Inventory.get_child(currSlot + 1).toggle_mode
 			inv[currSlot] = inv[currSlot + 1]
 			inv[currSlot + 1] = null
 			
 			$UI/Inventory.get_child(currSlot + 1).hide()
+			$UI/Inventory.get_child(currSlot + 1).toggle_mode = false
 		else:
 			break
 		
 		currSlot += 1
-
+	
+	if currSlot == slot:
+		$UI/Inventory.get_child(currSlot).hide()
+		$UI/Inventory.get_child(currSlot).toggle_mode = false
+		inv[currSlot] = null
+	
